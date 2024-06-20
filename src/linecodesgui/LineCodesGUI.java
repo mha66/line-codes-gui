@@ -25,18 +25,22 @@ import javafx.stage.Stage;
 public class LineCodesGUI extends Application {
     
     
-    static DigitalWave w = new DigitalWave();
+    private static DigitalWave w = new DigitalWave();
     
-    private static void setDigitalWave(String selection, String data){
+    public enum LineCode{
+        MLT3, B8ZS, HDB3;
+    } 
+    
+    private static void setDigitalWave(LineCode selection, String data){
         
         switch(selection){
-            case "MLT3":
+            case MLT3:
                 w = new DigitalWave(DigitalWave.mlt3(data));
                 break;
-            case "B8ZS":
+            case B8ZS:
                 w = new DigitalWave(DigitalWave.b8zs(data));
                 break;
-            case "HDB3":
+            case HDB3:
                 w = new DigitalWave(DigitalWave.hdb3(data));
                 break;
         }
@@ -56,9 +60,9 @@ public class LineCodesGUI extends Application {
         TextField tf = new TextField();
         tf.setPromptText("Enter digital data");
         
-        ComboBox<String> codeTypes = new ComboBox();
-        codeTypes.getItems().addAll("MLT3", "B8ZS","HDB3");
-        codeTypes.setValue("MLT3");
+        ComboBox<LineCode> codeTypes = new ComboBox();
+        codeTypes.getItems().addAll(LineCode.values());
+        codeTypes.setValue(LineCode.MLT3);
         
        
         
@@ -180,7 +184,7 @@ public class LineCodesGUI extends Application {
         
         Scene scene = new Scene(sp, 300, 250);
         
-        primaryStage.setTitle("Shiiiiiiiiiiiii");
+        primaryStage.setTitle("S");
         primaryStage.setScene(scene);
         primaryStage.show();
         

@@ -105,7 +105,7 @@ public class DigitalWave{
         int numOnes = 0;
         boolean firstSub = false;
         
-        for(int i= 0; i<data.length(); i++)
+        for(int i= 0; i < data.length(); i++)
         {
             if(data.regionMatches(i, "0000", 0, 4))
             {
