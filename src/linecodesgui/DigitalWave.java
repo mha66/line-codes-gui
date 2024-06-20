@@ -19,17 +19,21 @@ public class DigitalWave{
     static final int Y_HI = 50;
     static final int Y_0 = 100;
     static final int Y_LO = 150;
+    static final int X_INTIAL = 10;
     static final int DX = 50;
    
     ArrayList<Line> lines = new ArrayList<>();
+
+    public DigitalWave() {
+        lines.add(new Line(X_INTIAL, Y_0, X_INTIAL + 10*DX, Y_0 ));
+    }
     
- 
 
     public DigitalWave(String signal) {
        signal += 'n'; //end char
        char levels[] = signal.toCharArray();
        
-       int x = 10;
+       int x = X_INTIAL;
        for(int i = 0; i < signal.length() - 1; i++)
        {
            if(levels[i] == '0')

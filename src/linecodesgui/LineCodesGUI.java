@@ -9,6 +9,8 @@ import javafx.event.*;
 import javafx.geometry.*;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.*;
@@ -23,18 +25,51 @@ import javafx.stage.Stage;
 public class LineCodesGUI extends Application {
     
     
+    static DigitalWave w = new DigitalWave();
+    
+    private static void setDigitalWave(String selection, String data){
+        
+        switch(selection){
+            case "MLT3":
+                w = new DigitalWave(DigitalWave.mlt3(data));
+                break;
+            case "B8ZS":
+                w = new DigitalWave(DigitalWave.b8zs(data));
+                break;
+            case "HDB3":
+                w = new DigitalWave(DigitalWave.hdb3(data));
+                break;
+        }
+    } 
+    
     @Override
     public void start(Stage primaryStage) {
      
-        DigitalWave w = new DigitalWave(DigitalWave.mlt3("0110010110100100001"));
+        //DigitalWave w = new DigitalWave(DigitalWave.mlt3("0110010110100100001"));
         //DigitalWave w = new DigitalWave(DigitalWave.hdb3("01000000001011000001"));
         //DigitalWave w = new DigitalWave(DigitalWave.b8zs("0100100000000101"));
+        
         Pane pane = new Pane();
-       
         pane.getChildren().addAll(w.lines);
+       
         
+        TextField tf = new TextField();
+        tf.setPromptText("Enter digital data");
         
-        Scene scene = new Scene(pane, 300, 250);
+        ComboBox<String> codeTypes = new ComboBox();
+        codeTypes.getItems().addAll("MLT3", "B8ZS","HDB3");
+        codeTypes.setValue("MLT3");
+        
+       
+        
+        Button submit = new Button("Submit data");
+        submit.setOnAction((ActionEvent e) ->{
+            setDigitalWave(codeTypes.getValue(), tf.getText());
+            pane.getChildren().setAll(w.lines);
+        });
+        
+        FlowPane flow = new FlowPane(Orientation.VERTICAL, 0, 50, pane, codeTypes, tf, submit);
+        Scene scene = new Scene(flow, 300, 250);
            
         primaryStage.setTitle("Line Codes");
         primaryStage.setScene(scene);
