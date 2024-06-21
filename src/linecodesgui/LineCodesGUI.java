@@ -4,6 +4,7 @@
  */
 package linecodesgui;
 
+import java.util.function.UnaryOperator;
 import javafx.application.Application;
 import javafx.event.*;
 import javafx.geometry.*;
@@ -11,6 +12,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextFormatter;
+import javafx.scene.control.TextFormatter.Change;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.*;
@@ -59,6 +62,7 @@ public class LineCodesGUI extends Application {
         
         TextField tf = new TextField();
         tf.setPromptText("Enter digital data");
+        tf.setTextFormatter(new TextFormatter <> (  change -> change.getControlNewText().matches("[0-1]*") ? change : null));
         
         ComboBox<LineCode> codeTypes = new ComboBox();
         codeTypes.getItems().addAll(LineCode.values());
@@ -73,6 +77,8 @@ public class LineCodesGUI extends Application {
         });
         
         FlowPane flow = new FlowPane(Orientation.VERTICAL, 0, 50, pane, codeTypes, tf, submit);
+        flow.setAlignment(Pos.CENTER);
+        flow.setColumnHalignment(HPos.CENTER);
         Scene scene = new Scene(flow, 300, 250);
            
         primaryStage.setTitle("Line Codes");

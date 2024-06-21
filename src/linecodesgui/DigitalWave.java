@@ -70,24 +70,28 @@ public class DigitalWave{
         String signal = "";
         int lastPolarity = -1;
         
-        data = data.replaceAll("00000000", "000v10v1");
+        data = data.replaceAll("00000000", "000vb0vb");
         
         for(int i= 0; i<data.length(); i++)
         {
             switch (data.charAt(i)) {
                 case '1':
-                    if(lastPolarity > 0)
+                case 'b':
+                    /*if(lastPolarity > 0)
                         signal += '-';
                     else
-                        signal += '+';
+                        signal += '+';*/
+                    
+                    signal += (lastPolarity > 0) ? '-' : '+';
                     lastPolarity *= -1;
                     break;
                 
                 case 'v':
-                    if(lastPolarity < 0)
+                    /*if(lastPolarity < 0)
                         signal += '-';
                     else
-                        signal += '+';
+                        signal += '+';*/
+                    signal += (lastPolarity < 0) ? '-' : '+';
                     break;
                 case '0':
                     signal += '0';
@@ -109,20 +113,26 @@ public class DigitalWave{
         {
             if(data.regionMatches(i, "0000", 0, 4))
             {
-                if(numOnes%2 == 0)
+                /*if(numOnes%2 == 0)
                     data = data.replaceFirst("0000", "b00v");
                 else
-                    data = data.replaceFirst("0000", "000v");
+                    data = data.replaceFirst("0000", "000v");*/
+                
+                data = (numOnes%2 == 0) ? data.replaceFirst("0000", "b00v") : data.replaceFirst("0000", "000v");
+                
                 firstSub = true;
                 numOnes = 0;
             }
             switch (data.charAt(i)) {
                 case '1':
                 case 'b':
-                    if(lastPolarity > 0)
+                    
+                    signal += (lastPolarity > 0) ? '-' : '+';
+                    
+                    /*if(lastPolarity > 0)
                         signal += '-';
                     else
-                        signal += '+';
+                        signal += '+';*/
                     
                     if(data.charAt(i)== '1' && firstSub)
                         numOnes++;
@@ -131,10 +141,12 @@ public class DigitalWave{
                     break;
                 
                 case 'v':
-                    if(lastPolarity < 0)
+                    
+                     signal += (lastPolarity < 0) ? '-' : '+';
+                    /*if(lastPolarity < 0)
                         signal += '-';
                     else
-                        signal += '+';
+                        signal += '+';*/
                     break;
                     
                 case '0':
@@ -152,17 +164,21 @@ public class DigitalWave{
         int currentPolarity = 1;
         boolean dirUp = true ;
            
-        for(int i= 0; i<data.length(); i++)
+        for(int i= 0; i < data.length(); i++)
         {
             switch (data.charAt(i)) {
                 case '1':
-                    if(currentPolarity == 1)
+                    
+                    signal += (currentPolarity == 1) ? '+' : 
+                              (currentPolarity == 0) ? '0' :
+                              '-';  
+                   /* if(currentPolarity == 1)
                         signal += '+';
                     else if(currentPolarity == 0)
                         signal += '0';
                     else
                         signal += '-';
-                    
+                    */
                     if(currentPolarity == -1 || currentPolarity == 1)
                         dirUp = !dirUp;
                     
@@ -174,10 +190,11 @@ public class DigitalWave{
                     break;
                 
                 case '0':
-                    if(i == 0)
-                        signal += '+';
+                   /* if(i == 0)
+                        signal += '0';
                     else
-                        signal += signal.charAt(i-1);
+                        signal += signal.charAt(i-1);*/
+                    signal += (i==0) ? '0' : signal.charAt(i-1);
                     break;
                 default:
                     break;
