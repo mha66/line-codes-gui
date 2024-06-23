@@ -21,6 +21,7 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 /**
@@ -37,9 +38,15 @@ public class LineCodesGUI extends Application {
     @Override
     public void start(Stage primaryStage) {
      
+             
         Pane pane = new Pane();
-        pane.getChildren().addAll(w.lines);
-       
+        
+        pane.getChildren().addAll(
+                new Text(0, DigitalWave.Y_HI, "V+"),
+                new Text(0, DigitalWave.Y_0, "0"),
+                new Text(0, DigitalWave.Y_LO, "V-"),
+                w.wave);
+        
         
         TextField tf = new TextField();
         tf.setPromptText("Enter digital data");
@@ -47,14 +54,15 @@ public class LineCodesGUI extends Application {
         
         ComboBox<DigitalWave.LineCode> codeTypes = new ComboBox();
         codeTypes.getItems().addAll(DigitalWave.LineCode.values());
-        codeTypes.setValue(DigitalWave.LineCode.MLT3);
+        codeTypes.setValue(codeTypes.getItems().get(0));
         
-       
         
-        Button submit = new Button("Submit data");
+        
+        Button submit = new Button("Convert Data");
         submit.setOnAction((ActionEvent e) -> {
-            w = new DigitalWave(DigitalWave.dataToSignal(codeTypes.getValue(), tf.getText()));
-            pane.getChildren().setAll(w.lines);
+            pane.getChildren().remove(w.wave);
+            w = new DigitalWave(DigitalWave.dataToSignal(codeTypes.getValue(), tf.getText()), tf.getText());
+            pane.getChildren().add(w.wave);
         });
         
         FlowPane flow = new FlowPane(Orientation.VERTICAL, 0, 50, pane, codeTypes, tf, submit);

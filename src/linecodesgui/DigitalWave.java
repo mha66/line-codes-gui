@@ -6,6 +6,7 @@ package linecodesgui;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import javafx.scene.layout.Pane;
 import javafx.scene.shape.Line;
 
 
@@ -15,77 +16,29 @@ import javafx.scene.shape.Line;
  *
  * @author mhame
  */
-public class DigitalWave{
+public class DigitalWave extends WaveDraw{
     
       public enum LineCode{
         AMI, PSEUDOTERNARY, MLT3, B8ZS, HDB3;
     } 
     
-
-    static final int Y_HI = 50;
-    static final int Y_0 = 100;
-    static final int Y_LO = 150;
-    static final int X_INTIAL = 10;
-    static final int DX = 50;
-   
-    ArrayList<Line> lines = new ArrayList<>();
-
+    Pane wave = new Pane();
+      
     public DigitalWave() {
-        lines.add(new Line(X_INTIAL, Y_0, X_INTIAL + 10*DX, Y_0 ));
+      super();
+      wave.getChildren().addAll(lines);
+      wave.getChildren().addAll(dataText);
     }
     
-
-    public DigitalWave(String signal) {
-       signal += 'n'; //end char
-       char levels[] = signal.toCharArray();
-       
-       int x = X_INTIAL;
-       for(int i = 0; i < signal.length() - 1; i++)
-       {
-           if(levels[i] == '0')
-           {
-               lines.add(new Line(x, Y_0, x+DX, Y_0 ));
-               x+=DX;
-               if(levels[i+1] == '+')
-                   lines.add(new Line(x, Y_0, x, Y_HI ));
-               else if(levels[i+1] == '-')
-                   lines.add(new Line(x, Y_0, x, Y_LO ));
-           }
-           else if(levels[i] == '+')
-           {
-               lines.add(new Line(x, Y_HI, x+DX, Y_HI ));
-               x+=DX;
-               if(levels[i+1] == '0')
-                   lines.add(new Line(x, Y_HI, x, Y_0 ));
-               else if(levels[i+1] == '-')
-                   lines.add(new Line(x, Y_HI, x, Y_LO ));
-           }
-           else if(levels[i] == '-')
-           {
-               lines.add(new Line(x, Y_LO, x+DX, Y_LO ));
-               x+=DX;
-               if(levels[i+1] == '0')
-                   lines.add(new Line(x, Y_LO, x, Y_0 ));
-               else if(levels[i+1] == '+')
-                   lines.add(new Line(x, Y_LO, x, Y_HI ));
-           }
-       } 
+    
+    public DigitalWave(String signal, String data) {
+      super(signal, data);
+      wave.getChildren().addAll(lines);
+      wave.getChildren().addAll(dataText);
     }
     
    
     public static String dataToSignal(LineCode selection, String data){
-        
-        /*switch(selection){
-            case MLT3:
-                w = new DigitalWave(DigitalWave.mlt3(data));
-                break;
-            case B8ZS:
-                w = new DigitalWave(DigitalWave.b8zs(data));
-                break;
-            case HDB3:
-                w = new DigitalWave(DigitalWave.hdb3(data));
-                break;
-        }*/
         try{
             //m is the method with the same name as the selected line code
             Method m = DigitalWave.class.getDeclaredMethod(selection.toString().toLowerCase(), String.class);
@@ -94,7 +47,7 @@ public class DigitalWave{
        catch(Exception e){
              System.out.println(e.toString());
              return "0000000000";
-         }
+        }
     } 
     
     public static String b8zs(String data){
