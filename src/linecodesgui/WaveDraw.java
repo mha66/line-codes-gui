@@ -37,6 +37,7 @@ public abstract class WaveDraw {
     }
     
     public WaveDraw(String signal, String data){
+       boolean hasHalfLevels = signal.length() != data.length();
        signal += 'n'; //end char
        char levels[] = signal.toCharArray();
        
@@ -45,33 +46,48 @@ public abstract class WaveDraw {
        {
            if(levels[i] == '0')
            {
-               lines.add(new Line(x, Y_0, x+DX, Y_0 ));
-               dataText.add(new Text(x + DATA_HOFFSET, Y_HI + DATA_VOFFSET, data.substring(i,i+1)));
-               x+=DX;
-               if(levels[i+1] == '+')
-                   lines.add(new Line(x, Y_0, x, Y_HI ));
-               else if(levels[i+1] == '-')
-                   lines.add(new Line(x, Y_0, x, Y_LO ));
+              lines.add(new Line(x, Y_0, x+DX, Y_0 ));
+              if(!hasHalfLevels || i%2 == 0)
+                    dataText.add(new Text(x + DATA_HOFFSET, Y_HI + DATA_VOFFSET,
+                            String.valueOf(data.charAt(hasHalfLevels ? i/2 : i))));
+               x += DX;
+              
+               if(levels[i+1] != levels[i] && levels[i+1] != 'n') 
+                   lines.add(new Line(x, Y_0, x,
+                           (levels[i+1]== '+' || levels[i+1]== 'H') ? Y_HI : Y_LO ));
+         
            }
-           else if(levels[i] == '+')
+           else if(levels[i] == '+' || levels[i] == 'H')
            {
-               lines.add(new Line(x, Y_HI, x+DX, Y_HI ));
-               dataText.add(new Text(x + DATA_HOFFSET, Y_HI + DATA_VOFFSET, data.substring(i,i+1)));
-               x+=DX;
-               if(levels[i+1] == '0')
-                   lines.add(new Line(x, Y_HI, x, Y_0 ));
-               else if(levels[i+1] == '-')
-                   lines.add(new Line(x, Y_HI, x, Y_LO ));
+                lines.add(new Line(x, 
+                                 Y_HI,
+                                 levels[i]=='+' ? x+DX : x+DX/2,
+                                 Y_HI ));
+               
+                if(!hasHalfLevels || i%2 == 0)
+                    dataText.add(new Text(x + DATA_HOFFSET, Y_HI + DATA_VOFFSET,
+                            String.valueOf(data.charAt(hasHalfLevels ? i/2 : i))));
+               x += (levels[i]=='+') ? DX : DX/2;
+              
+               if(levels[i+1] != levels[i] && levels[i+1] != 'n')
+                   lines.add(new Line(x, Y_HI, x,
+                           (levels[i+1]== '0') ? Y_0 : Y_LO ));
            }
-           else if(levels[i] == '-')
+           else if(levels[i] == '-' || levels[i] == 'L')
            {
-               lines.add(new Line(x, Y_LO, x+DX, Y_LO ));
-               dataText.add(new Text(x + DATA_HOFFSET, Y_HI + DATA_VOFFSET, data.substring(i,i+1)));
-               x+=DX;
-               if(levels[i+1] == '0')
-                   lines.add(new Line(x, Y_LO, x, Y_0 ));
-               else if(levels[i+1] == '+')
-                   lines.add(new Line(x, Y_LO, x, Y_HI ));
+               lines.add(new Line(x, 
+                                 Y_LO,
+                                 levels[i]=='-' ? x+DX : x+DX/2,
+                                 Y_LO ));
+               
+               if(!hasHalfLevels || i%2 == 0)
+                    dataText.add(new Text(x + DATA_HOFFSET, Y_HI + DATA_VOFFSET,
+                            String.valueOf(data.charAt(hasHalfLevels ? i/2 : i))));
+               x += (levels[i]=='-') ? DX : DX/2;
+              
+                if(levels[i+1] != levels[i] && levels[i+1] != 'n')
+                   lines.add(new Line(x, Y_LO, x,
+                           (levels[i+1]== '0') ? Y_0 : Y_HI ));
            }
        } 
     }

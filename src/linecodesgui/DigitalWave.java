@@ -19,7 +19,7 @@ import javafx.scene.shape.Line;
 public class DigitalWave extends WaveDraw{
     
       public enum LineCode{
-        AMI, PSEUDOTERNARY, MLT3, B8ZS, HDB3;
+        MANCHESTER, AMI, PSEUDOTERNARY, MLT3, B8ZS, HDB3;
     } 
     
     Pane wave = new Pane();
@@ -199,6 +199,12 @@ public class DigitalWave extends WaveDraw{
                 }
         }
         return signal;
+      }
+      
+       public static String manchester(String data){
+        String signal = data.replaceAll("1", "LH");
+        return signal.replaceAll("0", "HL");
+        
       }
      
     }

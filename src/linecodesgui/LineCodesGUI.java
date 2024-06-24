@@ -59,11 +59,15 @@ public class LineCodesGUI extends Application {
         
         
         Button submit = new Button("Convert Data");
+        try{
         submit.setOnAction((ActionEvent e) -> {
             pane.getChildren().remove(w.wave);
             w = new DigitalWave(DigitalWave.dataToSignal(codeTypes.getValue(), tf.getText()), tf.getText());
             pane.getChildren().add(w.wave);
         });
+        } catch(Exception e){
+            System.out.println(e);
+        }
         
         FlowPane flow = new FlowPane(Orientation.VERTICAL, 0, 50, pane, codeTypes, tf, submit);
         flow.setAlignment(Pos.CENTER);
