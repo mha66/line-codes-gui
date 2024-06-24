@@ -19,7 +19,21 @@ import javafx.scene.shape.Line;
 public class DigitalWave extends WaveDraw{
     
       public enum LineCode{
-        MANCHESTER, AMI, PSEUDOTERNARY, MLT3, B8ZS, HDB3;
+        MANCHESTER, DIFFMANCHESTER, AMI, PSEUDOTERNARY, MLT3, B8ZS, HDB3;
+        
+        @Override
+        public String toString(){
+            switch(this){
+                case MANCHESTER:
+                    return "Manchester";
+                case DIFFMANCHESTER:
+                    return "Differential Manchester";
+                case PSEUDOTERNARY:
+                    return "Pseudoternary";
+                default:
+                    return this.name();
+              }
+        }
     } 
     
     Pane wave = new Pane();
@@ -41,12 +55,12 @@ public class DigitalWave extends WaveDraw{
     public static String dataToSignal(LineCode selection, String data){
         try{
             //m is the method with the same name as the selected line code
-            Method m = DigitalWave.class.getDeclaredMethod(selection.toString().toLowerCase(), String.class);
+            Method m = DigitalWave.class.getDeclaredMethod(selection.name().toLowerCase(), String.class);
             return (String)m.invoke(DigitalWave.class, data);
         }
        catch(Exception e){
              System.out.println(e.toString());
-             return "0000000000";
+             return "000000000+";
         }
     } 
     
@@ -202,9 +216,21 @@ public class DigitalWave extends WaveDraw{
       }
       
        public static String manchester(String data){
-        String signal = data.replaceAll("1", "LH");
-        return signal.replaceAll("0", "HL");
+        String signal = data.replaceAll("1", "-+");
+        return signal.replaceAll("0", "+-");
+      }
+       
+       public static String diffmanchester(String data){
+        String signal = manchester(data.substring(0, 1));
+        boolean isManchesterOne = data.charAt(0) == '1';
         
+        for(int i=1; i < data.length(); i++)
+        {
+            if(data.charAt(i) == '1')
+                isManchesterOne = !isManchesterOne;
+            signal += isManchesterOne ? "-+" : "+-"; 
+        }
+        return signal;
       }
      
     }

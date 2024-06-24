@@ -54,36 +54,36 @@ public abstract class WaveDraw {
               
                if(levels[i+1] != levels[i] && levels[i+1] != 'n') 
                    lines.add(new Line(x, Y_0, x,
-                           (levels[i+1]== '+' || levels[i+1]== 'H') ? Y_HI : Y_LO ));
+                           (levels[i+1]== '+') ? Y_HI : Y_LO ));
          
            }
-           else if(levels[i] == '+' || levels[i] == 'H')
+           else if(levels[i] == '+')
            {
                 lines.add(new Line(x, 
                                  Y_HI,
-                                 levels[i]=='+' ? x+DX : x+DX/2,
+                                 hasHalfLevels ? x+DX/2 : x+DX,
                                  Y_HI ));
                
                 if(!hasHalfLevels || i%2 == 0)
                     dataText.add(new Text(x + DATA_HOFFSET, Y_HI + DATA_VOFFSET,
                             String.valueOf(data.charAt(hasHalfLevels ? i/2 : i))));
-               x += (levels[i]=='+') ? DX : DX/2;
+               x += hasHalfLevels ? DX/2 : DX;
               
                if(levels[i+1] != levels[i] && levels[i+1] != 'n')
                    lines.add(new Line(x, Y_HI, x,
                            (levels[i+1]== '0') ? Y_0 : Y_LO ));
            }
-           else if(levels[i] == '-' || levels[i] == 'L')
+           else if(levels[i] == '-')
            {
                lines.add(new Line(x, 
                                  Y_LO,
-                                 levels[i]=='-' ? x+DX : x+DX/2,
+                                 hasHalfLevels ? x+DX/2 : x+DX,
                                  Y_LO ));
                
                if(!hasHalfLevels || i%2 == 0)
                     dataText.add(new Text(x + DATA_HOFFSET, Y_HI + DATA_VOFFSET,
                             String.valueOf(data.charAt(hasHalfLevels ? i/2 : i))));
-               x += (levels[i]=='-') ? DX : DX/2;
+               x += hasHalfLevels ? DX/2 : DX;
               
                 if(levels[i+1] != levels[i] && levels[i+1] != 'n')
                    lines.add(new Line(x, Y_LO, x,
