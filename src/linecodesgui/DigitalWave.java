@@ -19,11 +19,15 @@ import javafx.scene.shape.Line;
 public class DigitalWave extends WaveDraw{
     
       public enum LineCode{
-        MANCHESTER, DIFFMANCHESTER, AMI, PSEUDOTERNARY, MLT3, B8ZS, HDB3;
+        NRZL, NRZI, MANCHESTER, DIFFMANCHESTER, AMI, PSEUDOTERNARY, MLT3, B8ZS, HDB3;
         
         @Override
         public String toString(){
             switch(this){
+                case NRZL:
+                case NRZI:
+                    final int len = this.name().length();
+                    return this.name().substring(0, len-1) + '-' + this.name().charAt(len-1);
                 case MANCHESTER:
                     return "Manchester";
                 case DIFFMANCHESTER:
@@ -41,6 +45,7 @@ public class DigitalWave extends WaveDraw{
     public DigitalWave() {
       super();
       wave.getChildren().addAll(lines);
+      wave.getChildren().addAll(dataLines);
       wave.getChildren().addAll(dataText);
     }
     
@@ -48,6 +53,7 @@ public class DigitalWave extends WaveDraw{
     public DigitalWave(String signal, String data) {
       super(signal, data);
       wave.getChildren().addAll(lines);
+      wave.getChildren().addAll(dataLines);
       wave.getChildren().addAll(dataText);
     }
     
@@ -229,6 +235,24 @@ public class DigitalWave extends WaveDraw{
             if(data.charAt(i) == '1')
                 isManchesterOne = !isManchesterOne;
             signal += isManchesterOne ? "-+" : "+-"; 
+        }
+        return signal;
+      }
+     
+       public static String nrzl(String data){
+        String signal = data.replaceAll("0", "+");
+        return signal.replaceAll("1", "-");
+      }
+       
+      public static String nrzi(String data){
+        String signal = nrzl(data.substring(0, 1));
+        boolean isLogicHigh = data.charAt(0) == '0';
+        
+        for(int i=1; i < data.length(); i++)
+        {
+            if(data.charAt(i) == '1')
+                isLogicHigh = !isLogicHigh;
+            signal += isLogicHigh ? "+" : "-"; 
         }
         return signal;
       }

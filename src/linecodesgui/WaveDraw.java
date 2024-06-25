@@ -21,17 +21,22 @@ public abstract class WaveDraw {
     static final int DX = 50;
     static final int DATA_VOFFSET = -10;
     static final int DATA_HOFFSET = DX/2 - 3;
+    static final int DASHES_VOFFSET = 30;
    
     ArrayList<Line> lines = new ArrayList<>();
+    ArrayList<Line> dataLines = new ArrayList<>();
     ArrayList<Text> dataText = new ArrayList<>();
     
 
     public WaveDraw() {
           lines.add(new Line(X_INTIAL, Y_0, X_INTIAL + 10*DX, Y_0 ));
+          
           int x = X_INTIAL;
           for(int i = 0 ; i < 10; i++)
           {
             dataText.add(new Text(x + DATA_HOFFSET, Y_HI + DATA_VOFFSET, "0"));
+            dataLines.add(new Line(x + DX, Y_LO + DASHES_VOFFSET, x + DX, Y_HI - DASHES_VOFFSET));
+            dataLines.get(i).getStrokeDashArray().add(5d);
             x+=DX;
           }
     }
@@ -48,8 +53,12 @@ public abstract class WaveDraw {
            {
               lines.add(new Line(x, Y_0, x+DX, Y_0 ));
               if(!hasHalfLevels || i%2 == 0)
+              {
                     dataText.add(new Text(x + DATA_HOFFSET, Y_HI + DATA_VOFFSET,
                             String.valueOf(data.charAt(hasHalfLevels ? i/2 : i))));
+                    dataLines.add(new Line(x + DX, Y_LO + DASHES_VOFFSET, x + DX, Y_HI - DASHES_VOFFSET));
+                    dataLines.get(hasHalfLevels ? i/2 : i).getStrokeDashArray().add(5d);
+              }
                x += DX;
               
                if(levels[i+1] != levels[i] && levels[i+1] != 'n') 
@@ -65,8 +74,13 @@ public abstract class WaveDraw {
                                  Y_HI ));
                
                 if(!hasHalfLevels || i%2 == 0)
+                {
                     dataText.add(new Text(x + DATA_HOFFSET, Y_HI + DATA_VOFFSET,
                             String.valueOf(data.charAt(hasHalfLevels ? i/2 : i))));
+                    
+                    dataLines.add(new Line(x+DX, Y_LO + DASHES_VOFFSET, x+DX, Y_HI - DASHES_VOFFSET));
+                    dataLines.get(hasHalfLevels ? i/2 : i).getStrokeDashArray().add(5d);
+                }
                x += hasHalfLevels ? DX/2 : DX;
               
                if(levels[i+1] != levels[i] && levels[i+1] != 'n')
@@ -81,8 +95,13 @@ public abstract class WaveDraw {
                                  Y_LO ));
                
                if(!hasHalfLevels || i%2 == 0)
+               {
                     dataText.add(new Text(x + DATA_HOFFSET, Y_HI + DATA_VOFFSET,
                             String.valueOf(data.charAt(hasHalfLevels ? i/2 : i))));
+                     
+                    dataLines.add(new Line(x+DX, Y_LO + DASHES_VOFFSET, x+DX, Y_HI - DASHES_VOFFSET));
+                    dataLines.get(hasHalfLevels ? i/2 : i).getStrokeDashArray().add(5d);
+               }
                x += hasHalfLevels ? DX/2 : DX;
               
                 if(levels[i+1] != levels[i] && levels[i+1] != 'n')
