@@ -11,15 +11,14 @@ import javafx.scene.shape.Line;
 
 
 
-
 /**
  *
  * @author mhame
  */
 public class DigitalWave extends WaveDraw{
-    
+
       public enum LineCode{
-        NRZL, NRZI, MANCHESTER, DIFFMANCHESTER, AMI, PSEUDOTERNARY, MLT3, B8ZS, HDB3;
+        NRZL, RZ, NRZI, MANCHESTER, DIFFMANCHESTER, AMI, PSEUDOTERNARY, MLT3, B8ZS, HDB3;
         
         @Override
         public String toString(){
@@ -42,6 +41,7 @@ public class DigitalWave extends WaveDraw{
     
     Pane wave = new Pane();
       
+    
     public DigitalWave() {
       super();
       wave.getChildren().addAll(lines);
@@ -57,7 +57,6 @@ public class DigitalWave extends WaveDraw{
       wave.getChildren().addAll(dataText);
     }
     
-   
     public static String dataToSignal(LineCode selection, String data){
         try{
             //m is the method with the same name as the selected line code
@@ -256,7 +255,10 @@ public class DigitalWave extends WaveDraw{
         }
         return signal;
       }
-     
+      public static String rz(String data){
+        String signal = data.replaceAll("0", "+0");
+        return signal.replaceAll("1", "-0");
+      }      
     }
 
     
