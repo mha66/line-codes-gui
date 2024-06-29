@@ -5,10 +5,7 @@
 package linecodesgui;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import javafx.scene.layout.Pane;
-import javafx.scene.shape.Line;
-
 
 
 /**
@@ -18,11 +15,13 @@ import javafx.scene.shape.Line;
 public class DigitalWave extends WaveDraw{
 
       public enum LineCode{
-        NRZL, RZ, NRZI, MANCHESTER, DIFFMANCHESTER, AMI, PSEUDOTERNARY, MLT3, B8ZS, HDB3;
+        UNIPOLARNRZ, NRZL, RZ, NRZI, MANCHESTER, DIFFMANCHESTER, AMI, PSEUDOTERNARY, MLT3, B8ZS, HDB3;
         
         @Override
         public String toString(){
             switch(this){
+                case UNIPOLARNRZ:
+                    return "Unipolar NRZ";
                 case NRZL:
                 case NRZI:
                     final int len = this.name().length();
@@ -258,6 +257,10 @@ public class DigitalWave extends WaveDraw{
       public static String rz(String data){
         String signal = data.replaceAll("0", "+0");
         return signal.replaceAll("1", "-0");
+      }    
+      
+       public static String unipolarnrz(String data){
+        return data.replaceAll("1", "+");
       }      
     }
 

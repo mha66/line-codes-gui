@@ -49,67 +49,76 @@ public abstract class WaveDraw {
        int x = X_INTIAL;
        for(int i = 0; i < signal.length() - 1; i++)
        {
-           if(levels[i] == '0')
-           {
-               lines.add(new Line(x, 
-                                 Y_0,
-                                 hasHalfLevels ? x+DX/2 : x+DX,
-                                 Y_0 ));
-              if(!hasHalfLevels || i%2 == 0)
-              {
-                    dataText.add(new Text(x + DATA_HOFFSET, Y_HI + DATA_VOFFSET,
-                            String.valueOf(data.charAt(hasHalfLevels ? i/2 : i))));
-                    dataLines.add(new Line(x + DX, Y_LO + DASHES_VOFFSET, x + DX, Y_HI - DASHES_VOFFSET));
-                    dataLines.get(hasHalfLevels ? i/2 : i).getStrokeDashArray().add(5d);
-              }
-               x += hasHalfLevels ? DX/2 : DX;
-              
-               if(levels[i+1] != levels[i] && levels[i+1] != 'n') 
-                   lines.add(new Line(x, Y_0, x,
-                           (levels[i+1]== '+') ? Y_HI : Y_LO ));
-         
-           }
-           else if(levels[i] == '+')
-           {
-                lines.add(new Line(x, 
-                                 Y_HI,
-                                 hasHalfLevels ? x+DX/2 : x+DX,
-                                 Y_HI ));
-               
-                if(!hasHalfLevels || i%2 == 0)
-                {
-                    dataText.add(new Text(x + DATA_HOFFSET, Y_HI + DATA_VOFFSET,
-                            String.valueOf(data.charAt(hasHalfLevels ? i/2 : i))));
-                    
-                    dataLines.add(new Line(x+DX, Y_LO + DASHES_VOFFSET, x+DX, Y_HI - DASHES_VOFFSET));
-                    dataLines.get(hasHalfLevels ? i/2 : i).getStrokeDashArray().add(5d);
-                }
-               x += hasHalfLevels ? DX/2 : DX;
-              
-               if(levels[i+1] != levels[i] && levels[i+1] != 'n')
-                   lines.add(new Line(x, Y_HI, x,
-                           (levels[i+1]== '0') ? Y_0 : Y_LO ));
-           }
-           else if(levels[i] == '-')
-           {
-               lines.add(new Line(x, 
-                                 Y_LO,
-                                 hasHalfLevels ? x+DX/2 : x+DX,
-                                 Y_LO ));
-               
-               if(!hasHalfLevels || i%2 == 0)
-               {
-                    dataText.add(new Text(x + DATA_HOFFSET, Y_HI + DATA_VOFFSET,
-                            String.valueOf(data.charAt(hasHalfLevels ? i/2 : i))));
-                     
-                    dataLines.add(new Line(x+DX, Y_LO + DASHES_VOFFSET, x+DX, Y_HI - DASHES_VOFFSET));
-                    dataLines.get(hasHalfLevels ? i/2 : i).getStrokeDashArray().add(5d);
-               }
-               x += hasHalfLevels ? DX/2 : DX;
-              
-                if(levels[i+1] != levels[i] && levels[i+1] != 'n')
-                   lines.add(new Line(x, Y_LO, x,
-                           (levels[i+1]== '0') ? Y_0 : Y_HI ));
+           switch (levels[i]) {
+               case '0':
+                   lines.add(new Line(x,
+                           Y_0,
+                           hasHalfLevels ? x+DX/2 : x+DX,
+                           Y_0 ));
+                   
+                   if(!hasHalfLevels || i%2 == 0)
+                   {
+                       dataText.add(new Text(x + DATA_HOFFSET, Y_HI + DATA_VOFFSET,
+                               String.valueOf(data.charAt(hasHalfLevels ? i/2 : i))));
+                       dataLines.add(new Line(x + DX, Y_LO + DASHES_VOFFSET, x + DX, Y_HI - DASHES_VOFFSET));
+                       dataLines.get(dataLines.size()-1).getStrokeDashArray().add(5d);
+                       
+                   }    
+                   x += hasHalfLevels ? DX/2 : DX;
+                   
+                   if(levels[i+1] != levels[i] && levels[i+1] != 'n')
+                       lines.add(new Line(x, Y_0, x,
+                               (levels[i+1]== '+') ? Y_HI : Y_LO ));
+                   break;
+                   
+                   
+               case '+':
+                   lines.add(new Line(x,
+                           Y_HI,
+                           hasHalfLevels ? x+DX/2 : x+DX,
+                           Y_HI ));
+                   
+                   if(!hasHalfLevels || i%2 == 0)
+                   {
+                       dataText.add(new Text(x + DATA_HOFFSET, Y_HI + DATA_VOFFSET,
+                               String.valueOf(data.charAt(hasHalfLevels ? i/2 : i))));
+                       
+                       dataLines.add(new Line(x+DX, Y_LO + DASHES_VOFFSET, x+DX, Y_HI - DASHES_VOFFSET));
+                       dataLines.get(dataLines.size()-1).getStrokeDashArray().add(5d);
+                   }  
+                   x += hasHalfLevels ? DX/2 : DX;
+                   
+                   if(levels[i+1] != levels[i] && levels[i+1] != 'n')
+                       lines.add(new Line(x, Y_HI, x,
+                               (levels[i+1]== '0') ? Y_0 : Y_LO ));
+                   
+                   break;
+                   
+                   
+               case '-':
+                   lines.add(new Line(x,
+                           Y_LO,
+                           hasHalfLevels ? x+DX/2 : x+DX,
+                           Y_LO ));
+                   
+                   if(!hasHalfLevels || i%2 == 0)
+                   {
+                       dataText.add(new Text(x + DATA_HOFFSET, Y_HI + DATA_VOFFSET,
+                               String.valueOf(data.charAt(hasHalfLevels ? i/2 : i))));
+                       
+                       dataLines.add(new Line(x+DX, Y_LO + DASHES_VOFFSET, x+DX, Y_HI - DASHES_VOFFSET));
+                       dataLines.get(dataLines.size()-1).getStrokeDashArray().add(5d);
+                   }   
+                   x += hasHalfLevels ? DX/2 : DX;
+                   
+                   if(levels[i+1] != levels[i] && levels[i+1] != 'n')
+                       lines.add(new Line(x, Y_LO, x,
+                               (levels[i+1]== '0') ? Y_0 : Y_HI ));
+                   break;
+                   
+                   
+               default:
+                   break;
            }
        } 
     }
